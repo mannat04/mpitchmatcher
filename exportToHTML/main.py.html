@@ -1,0 +1,102 @@
+<html>
+<head>
+<title>main.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #808080;}
+.s3 { color: #6a8759;}
+.s4 { color: #6897bb;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+main.py</font>
+</center></td></tr></table>
+<pre><span class="s0">from </span><span class="s1">tkinter </span><span class="s0">import </span><span class="s1">*</span>
+<span class="s0">from </span><span class="s1">tkinter </span><span class="s0">import </span><span class="s1">ttk</span>
+<span class="s0">from </span><span class="s1">tkinter </span><span class="s0">import </span><span class="s1">filedialog</span>
+<span class="s0">import </span><span class="s1">pandas</span>
+<span class="s0">from </span><span class="s1">matplotlib </span><span class="s0">import </span><span class="s1">pyplot </span><span class="s0">as </span><span class="s1">plt</span>
+<span class="s0">from </span><span class="s1">matplotlib.backends.backend_tkagg </span><span class="s0">import </span><span class="s1">(FigureCanvasTkAgg</span><span class="s0">,</span><span class="s1">NavigationToolbar2Tk)</span>
+
+
+<span class="s2">#trainers pitch is trainers_data_list</span>
+<span class="s2">#users data is user_data_list</span>
+<span class="s1">l=[]</span>
+<span class="s0">def </span><span class="s1">openfile():</span>
+    <span class="s0">global </span><span class="s1">l</span>
+    <span class="s1">user= filedialog.askopenfilename()</span>
+    <span class="s0">with </span><span class="s1">open(user</span><span class="s0">, </span><span class="s3">&quot;r&quot;</span><span class="s1">) </span><span class="s0">as </span><span class="s1">user_t:</span>
+        <span class="s1">u_data=pandas.read_csv(user_t)</span>
+        <span class="s1">user_pitch_list=u_data[</span><span class="s3">&quot;Pitch&quot;</span><span class="s1">].to_list()</span>
+        <span class="s1">l.append(user_pitch_list)</span>
+        <span class="s0">return </span><span class="s1">user_pitch_list</span>
+
+
+
+
+<span class="s1">trainers_data=pandas.read_csv(</span><span class="s3">&quot;Music AI .csv&quot;</span><span class="s1">)</span>
+<span class="s1">trainers_data_list=trainers_data[</span><span class="s3">&quot;Trainer Pitch(Hz)&quot;</span><span class="s1">].to_list()</span>
+<span class="s1">print(</span><span class="s3">&quot;trainers pitch is:&quot;</span><span class="s0">,</span><span class="s1">trainers_data_list)</span>
+<span class="s1">timestamps=pandas.read_csv(</span><span class="s3">&quot;timestamps.csv&quot;</span><span class="s1">)</span>
+<span class="s1">timestamps_list=timestamps[</span><span class="s3">&quot;Current Timestamp&quot;</span><span class="s1">].to_list()</span>
+
+<span class="s1">window=Tk()</span>
+
+
+<span class="s2">#------------------------------------------GUI----------------------------------------------------#</span>
+
+<span class="s1">window.title(</span><span class="s3">&quot;MUSIC AI&quot;</span><span class="s1">)</span>
+<span class="s1">window.minsize(width=</span><span class="s4">700</span><span class="s0">, </span><span class="s1">height=</span><span class="s4">700</span><span class="s1">)</span>
+<span class="s1">window.config(bg=</span><span class="s3">&quot;white&quot;</span><span class="s0">,</span><span class="s1">padx=</span><span class="s4">10</span><span class="s0">, </span><span class="s1">pady=</span><span class="s4">10</span><span class="s1">)</span>
+
+
+<span class="s1">main_frame = Frame(window</span><span class="s0">, </span><span class="s1">bg=</span><span class="s3">&quot;azure&quot;</span><span class="s1">)</span>
+<span class="s1">main_frame.pack(fill=BOTH</span><span class="s0">, </span><span class="s1">expand=</span><span class="s4">1</span><span class="s1">)</span>
+
+
+<span class="s1">canvas = Canvas(main_frame</span><span class="s0">, </span><span class="s1">bg=</span><span class="s3">&quot;azure&quot;</span><span class="s1">)</span>
+<span class="s1">canvas.pack(side=LEFT</span><span class="s0">, </span><span class="s1">fill=BOTH</span><span class="s0">, </span><span class="s1">expand=</span><span class="s4">1</span><span class="s1">)</span>
+<span class="s1">scrollbar = Scrollbar(main_frame</span><span class="s0">, </span><span class="s1">orient=VERTICAL</span><span class="s0">, </span><span class="s1">command=canvas.yview)</span>
+<span class="s1">scrollbar.pack(side=RIGHT</span><span class="s0">, </span><span class="s1">fill=Y)</span>
+<span class="s1">canvas.configure(yscrollcommand=scrollbar.set)</span>
+<span class="s1">canvas.bind(</span><span class="s3">'&lt;Configure&gt;'</span><span class="s0">, lambda </span><span class="s1">e: canvas.configure(scrollregion=canvas.bbox(</span><span class="s3">&quot;all&quot;</span><span class="s1">)))</span>
+<span class="s1">second_frame = Frame(canvas</span><span class="s0">, </span><span class="s1">bg=</span><span class="s3">&quot;azure&quot;</span><span class="s1">)</span>
+<span class="s1">canvas.create_window((</span><span class="s4">0</span><span class="s0">, </span><span class="s4">0</span><span class="s1">)</span><span class="s0">, </span><span class="s1">window=second_frame</span><span class="s0">, </span><span class="s1">anchor=</span><span class="s3">&quot;nw&quot;</span><span class="s1">)</span>
+
+<span class="s1">user_audio_label = Label(second_frame</span><span class="s0">, </span><span class="s1">text=</span><span class="s3">&quot;MUSIC&quot;</span><span class="s0">, </span><span class="s1">font=(</span><span class="s3">&quot;arial&quot;</span><span class="s0">, </span><span class="s4">14</span><span class="s0">,</span><span class="s1">)</span><span class="s0">, </span><span class="s1">bg=</span><span class="s3">&quot;azure&quot;</span><span class="s1">)</span>
+<span class="s1">user_audio_label.pack()</span>
+
+
+
+<span class="s1">button = ttk.Button(second_frame</span><span class="s0">, </span><span class="s1">text=</span><span class="s3">&quot;browse file&quot;</span><span class="s0">, </span><span class="s1">command=openfile)</span>
+<span class="s1">button.pack()</span>
+
+<span class="s1">print(l)</span>
+<span class="s1">a=openfile()</span>
+<span class="s2">#----------------------------------------GRAPHS-----------------------------------------#</span>
+<span class="s1">x=timestamps_list</span>
+<span class="s1">y1=a</span>
+<span class="s1">y2=trainers_data_list</span>
+<span class="s2">#(graph1)</span>
+<span class="s1">fig = plt.Figure(figsize=(</span><span class="s4">6</span><span class="s0">,</span><span class="s4">5</span><span class="s1">)</span><span class="s0">, </span><span class="s1">dpi=</span><span class="s4">100</span><span class="s1">)</span>
+<span class="s1">plot = fig.add_subplot(</span><span class="s4">111</span><span class="s1">)</span>
+<span class="s1">plot.set_title(</span><span class="s3">&quot;timestamp-user pitch graph&quot;</span><span class="s1">)</span>
+<span class="s1">plot.set_xlabel(</span><span class="s3">&quot;timstamps&quot;</span><span class="s1">)</span>
+<span class="s1">plot.set_ylabel(</span><span class="s3">&quot;user pitch frequency&quot;</span><span class="s1">)</span>
+<span class="s1">plot.plot(x</span><span class="s0">,</span><span class="s1">y1</span><span class="s0">,</span><span class="s1">color=</span><span class="s3">&quot;r&quot;</span><span class="s1">)</span>
+
+
+
+<span class="s1">chart_type = FigureCanvasTkAgg(fig</span><span class="s0">,</span><span class="s1">second_frame)</span>
+<span class="s1">chart_type.get_tk_widget().pack()</span>
+<span class="s1">print(l[</span><span class="s4">0</span><span class="s1">])</span>
+<span class="s2">#gui is not coming first because of this placement</span>
+<span class="s1">window.mainloop()</span>
+</pre>
+</body>
+</html>
